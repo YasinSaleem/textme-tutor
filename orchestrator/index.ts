@@ -58,13 +58,23 @@ export async function runOrchestrator() {
   let parentText = "";
   let replies: string[] = [];
   try {
-    const parsed = JSON.parse(formattedJsonStr);
-    parentText = parsed.parent_message;
-    replies = parsed.replies || [];
+    const cleanStr = formattedJsonStr
+      .replace(/^```json\s*/i, "")
+      .replace(/```\s*$/, "")
+      .trim();
+    const parsed = JSON.parse(cleanStr);
+    parentText = parsed.parent_message || parsed.parentMessage || "";
+    replies = parsed.replies || parsed.reply_messages || parsed.replyMessages || [];
   } catch (e) {
     console.error("Failed to parse formatted JSON, falling back to unified post:", e);
     parentText = lessonMarkdown;
     replies = [];
+  }
+
+  // Ensure parentText is never empty to prevent Slack "no_text" API errors
+  if (!parentText) {
+    console.warn("Parsed parent_message is empty. Falling back to lessonMarkdown.");
+    parentText = lessonMarkdown;
   }
 
   // 2. Publish to Slack
