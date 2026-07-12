@@ -120,3 +120,6 @@ Deploy the webhook listener to any hosting provider that supports Node.js.
 - **Process A**: If Process A fails, GitHub Actions automatically sends an email notification on workflow failure.
 - **Process B Health Check**: You can ping the listener server root to verify connection health.
 - **Token Audits**: Audit token consumption metrics at any time by reviewing the local log file [logs/token-usage.jsonl](logs/token-usage.jsonl).
+
+
+# SQL Tutor Automation
