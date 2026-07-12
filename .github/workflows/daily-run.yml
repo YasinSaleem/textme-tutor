@@ -1,0 +1,40 @@
+name: Daily DSA Tutor Run
+
+on:
+  schedule:
+    # Run daily at 08:00 AM UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Allows manual execution from GitHub UI
+
+jobs:
+  run-tutor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci || npm install
+
+      - name: Run Database Migrations
+        run: npm run db:migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Run Tutor Orchestrator
+        run: npm start
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_BASE_URL: ${{ secrets.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1' }}
+          OPENROUTER_MODEL: ${{ secrets.OPENROUTER_MODEL || 'openrouter/free' }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          USER_ID: ${{ secrets.USER_ID || 'default-user' }}
+          VAGUE_RESEND_INTERVAL_DAYS: ${{ secrets.VAGUE_RESEND_INTERVAL_DAYS || '3' }}

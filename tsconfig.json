@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "agents/**/*.ts",
+    "db/**/*.ts",
+    "orchestrator/**/*.ts",
+    "slack/**/*.ts",
+    "scripts/**/*.ts"
+  ]
+}
+

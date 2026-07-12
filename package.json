@@ -1,0 +1,32 @@
+{
+  "name": "daily-dsa-intuition-builder",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Slack-based daily DSA teaching pipeline focused on intuition and pattern recognition.",
+  "scripts": {
+    "check:db": "bash scripts/check-db.sh",
+    "check:openrouter": "bash scripts/check-openrouter.sh",
+    "check:slack": "bash scripts/post-slack-test.sh",
+    "phase0:verify": "bash scripts/check-db.sh && bash scripts/check-openrouter.sh && bash scripts/post-slack-test.sh",
+    "db:migrate": "node --env-file=.env --import tsx db/scripts/migrate.ts",
+    "db:seed": "node --env-file=.env --import tsx db/scripts/seed.ts",
+    "db:test": "node --env-file=.env --import tsx --test db/tests/*.test.ts",
+    "phase1:verify": "npm run db:migrate && npm run db:seed && npm run db:test",
+    "start": "node --env-file=.env --import tsx orchestrator/index.ts",
+    "test:orchestrator": "node --env-file=.env --import tsx --test orchestrator/*.test.ts",
+    "test": "npm run db:test && node --env-file=.env --import tsx --test agents/pipeline.test.ts && node --env-file=.env --import tsx --test orchestrator/priority-resolver.test.ts && node --env-file=.env --import tsx --test orchestrator/index.test.ts && node --env-file=.env --import tsx --test orchestrator/hardening.test.ts && node --env-file=.env --import tsx --test slack/listener.test.ts"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/pg": "^8.20.0",
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
+  }
+}
