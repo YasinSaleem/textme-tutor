@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create empty .env file for command compatibility
+        run: touch .env
+
       - name: Run Daily SQL Tutor
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
