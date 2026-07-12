@@ -1,6 +1,9 @@
 name: Daily SQL Tutor Cron
 
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: '0 9 * * *'  # Runs daily at 9:00 AM UTC (4:30 PM IST)
   workflow_dispatch:      # Allows triggering manually from the Actions tab
